@@ -2,9 +2,8 @@ import numpy as np
 from math import ceil
 from functools import cached_property
 
-from .reducer_params import ReducerParams
-from .exeptions import TooSmallRequstedRadius
-
+from reducer.exeptions import TooSmallRequstedRadius
+from reducer.reduser_params import ReducerParams
 
 class ReducerGeometry:
     def __init__(self, params: ReducerParams):
@@ -41,7 +40,7 @@ class ReducerGeometry:
 
 
     def _get_outer_radius_from_inner(self, inner_radius) -> int:
-        return math.ceil(inner_radius + 2 * self.eccentricity)
+        return ceil(inner_radius + 2 * self.eccentricity)
 
 
     @cached_property
