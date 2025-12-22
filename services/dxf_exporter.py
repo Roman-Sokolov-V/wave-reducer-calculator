@@ -9,8 +9,8 @@ class ReducerDXFExporter:
             geometry: ReducerGeometry
     ):
         self.stacked_xy = geometry.stacked_xy
-        self.outer_radius = geometry.outer_radius
-        self.inner_radius = geometry.inner_radius
+        self.outer_radius = geometry.track_outer_radius
+        self.track_inner_radius = geometry.track_inner_radius
         self.radius_of_separator_outer = geometry.radius_of_separator_outer
         self.radius_of_separator_inner = geometry.radius_of_separator_inner
         self.eccentricity = geometry.eccentricity
@@ -23,7 +23,7 @@ class ReducerDXFExporter:
         msp.add_point([0, 0])
         msp.add_spline(self.stacked_xy)
         msp.add_circle((0, 0), radius=self.outer_radius)
-        msp.add_circle((0, 0), radius=self.inner_radius)
+        msp.add_circle((0, 0), radius=self.track_inner_radius)
         doc.saveas("base_wheel.dxf")
 
 
