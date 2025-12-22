@@ -7,8 +7,8 @@ from services.dxf_exporter import ReducerDXFExporter
 
 class DummyGeometry:
     stacked_xy = np.array([[0, 0], [1, 1]])
-    outer_radius = 100.0
-    inner_radius = 80.0
+    track_outer_radius = 100.0
+    track_inner_radius = 80.0
     radius_of_separator_outer = 60.0
     radius_of_separator_inner = 50.0
     eccentricity = 5.0
