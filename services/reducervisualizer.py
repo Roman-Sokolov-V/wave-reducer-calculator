@@ -7,7 +7,7 @@ class ReducerVisualizer:
     def __init__(self, geometry: ReducerGeometry):
         self.eccentricity = geometry.eccentricity
         self.reducer_outer_diameter = geometry.reducer_outer_diameter
-        self.requested_outer_radius = geometry.requested_outer_radius
+        self.track_outer_radius = geometry.track_outer_radius
         self.eccentric_radius = geometry.eccentric_radius
         self.radius_of_separator_outer = geometry.radius_of_separator_outer
         self.radius_of_separator_inner =geometry.radius_of_separator_inner
@@ -18,8 +18,8 @@ class ReducerVisualizer:
     def _wave(self, ax):
         ax.plot(*self.xy, color='b', linewidth=2.0)
 
-        if self.reducer_outer_diameter is None or self.reducer_outer_diameter < self.requested_outer_radius * 2 + 5:
-            self.reducer_outer_diameter = self.requested_outer_radius * 2 + 5
+        if self.reducer_outer_diameter is None or self.reducer_outer_diameter < self.track_outer_radius * 2 + 5:
+            self.reducer_outer_diameter = self.track_outer_radius * 2 + 5
         reduser_outer_circle = plt.Circle(
             (0, 0), self.reducer_outer_diameter / 2, color='b', fill=False, linewidth=2.0
         )
