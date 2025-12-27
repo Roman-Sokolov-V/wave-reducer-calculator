@@ -1,6 +1,6 @@
 import sys
 
-from PySide6 import QtWidgets
+from PySide6 import QtWidgets, QtCore
 from reducer.geometry import ReducerGeometry
 from reducer.reduser_params import ReducerParams
 from ui.ui_main_window import Ui_MainWindow
@@ -8,54 +8,41 @@ from ui.ui_main_window import Ui_MainWindow
 from services.reducervisualizer import ReducerVisualizer
 from services.dxf_exporter import ReducerDXFExporter
 
+from PySide6.QtWidgets import (
+    QApplication,
+    QMainWindow,
+    QVBoxLayout,
+)
 
-#
-# reducer_param = ReducerParams(
-#     gear_number=5,
-#     ball_diameter=12,
-#     #requested_outer_radius=50,
-#     #reducer_outer_diameter = 70
-#
-# )
-#
-# reducer_geometry = ReducerGeometry(reducer_param)
-#
-# print(reducer_geometry)
-# print(reducer_geometry.gear_number)
-# print(reducer_geometry.ball_diameter)
-# print(reducer_geometry.requested_outer_radius)
-# #print(reducer_geometry.reducer_outer_diameter)
-# print(reducer_geometry.resolution)
-# print(reducer_geometry.eccentricity)
-# print(reducer_geometry.number_of_waves)
-# print(reducer_geometry.min_inner_radius)
-# print(reducer_geometry.balls_radius)
-# print(reducer_geometry.separator_thickness)
-# print(reducer_geometry.track_outer_radius)
-# print(f"{reducer_geometry.track_inner_radius=}")
-# print(f"{reducer_geometry.eccentric_radius=}")
-# print(f"{reducer_geometry.radius_of_separator_outer=}")
-# print(f"{reducer_geometry.radius_of_separator_inner=}")
-# print(f"{reducer_geometry.xy=}")
-# print(f"{reducer_geometry.stacked_xy=}")
-# print(f"{reducer_geometry.balls_centers=}")
-#
-#
-# visualisation = ReducerVisualizer(reducer_geometry)
-# dxf = ReducerDXFExporter(reducer_geometry)
-#
-#
-# dxf.write_profiles_to_files()
-# visualisation.show(separator=False, eccentric=False)
+from matplotlib.backends.backend_qtagg import FigureCanvas
+from matplotlib.figure import Figure
+
+from reducer.exeptions import TooSmallRequstedRadius
 
 
 
-reducer_param = ReducerParams()
 
-class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
+class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+
+
+
+        self.default_notification = (f"ball number = {self.ball_number.value()} - required\n"
+                                   f"ball diameter = {self.ball_diameter.value()} - required\n"
+                                   f"track outer radius = {self.track_outer_radius.value()} - if 0 value will be calculated (minimum possible) \n"
+                                   f"reducer outer radius = {self.reducer_outer_diameter.value()} - if 0 will be calculated as track_outer_radius + 2 \n")
+        self.to_small_track_outer_radius_notification = ("inputed track outer radius is too small\n"
+                                                         "try to inputing biger number, or 0\n"
+                                                         "or change ball diameter or ball number\n")
+
+        self.exeption_hapened = False
+        self.notifications.setText(self.default_notification)
+
+        self.ball_number.valueChanged.connect(self.parameter_changed)
+        self.ball_diameter.valueChanged.connect(self.parameter_changed)
+        self.track_outer_radius.valueChanged.connect(self.parameter_changed)
 
         self.visualize_pushButton.setCheckable(True)
         self.export_pushButton.setCheckable(True)
@@ -63,14 +50,72 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.visualize_pushButton.clicked.connect(self.vizualize_button_clicked)
         self.export_pushButton.clicked.connect(self.export_pushButton_clicked)
 
+
+    def get_params(self) -> ReducerParams:
+        print(f"{self.track_outer_radius.value()=}")
+        print(f"{self.reducer_outer_diameter.value()=}")
+        reducer_param = ReducerParams(
+            gear_number=self.ball_number.value(),
+            ball_diameter=self.ball_diameter.value(),
+            requested_track_outer_radius=self.track_outer_radius.value() if self.track_outer_radius.value() != 0 else None,
+            reducer_outer_diameter=self.reducer_outer_diameter.value() if self.reducer_outer_diameter.value() != 0 else None,
+        )
+        return reducer_param
+
+    def clear_plot(self) -> None:
+        layout = self.plotContainer.layout()
+        if layout is None:
+            return
+
+        while layout.count():
+            item = layout.takeAt(0)
+            widget = item.widget()
+            if widget:
+                widget.deleteLater()
+
     def vizualize_button_clicked(self):
-        print("Clicked")
+        if self.ball_number.value() == 0 or self.ball_diameter.value() == 0:
+            self.notifications.setText("Input ball number and ball diameter")
+            return
+        try:
+            self.reducer_geometry = ReducerGeometry(self.get_params())
+            self.visualizer = ReducerVisualizer(self.reducer_geometry)
+        except TooSmallRequstedRadius as e:
+            print(str(e))
+            self.notifications.setText(self.to_small_track_outer_radius_notification)
+            self.exeption_hapened = True
+            self.clear_plot()
+
+        else:
+
+            layout = self.plotContainer.layout()
+            if layout is None:
+                print("layout is None")
+                layout = QVBoxLayout(self.plotContainer)
+
+            while layout.count():
+                item = layout.takeAt(0)
+                widget = item.widget()
+                if widget:
+                    widget.deleteLater()
+            layout.addWidget(self.visualizer.canvas)
+            self.visualizer.draw()
+
+
 
     def export_pushButton_clicked(self):
-        print("Clicked")
+        print("Clicked export_pushButton", self.ball_diameter)
+
+
+    def parameter_changed(self):
+        if self.exeption_hapened:
+            self.exeption_hapened = False
+            self.notifications.setText(self.default_notification)
+
 
 
 app = QtWidgets.QApplication(sys.argv)
+app.setStyle("Fusion")
 
 window = MainWindow()
 window.show()
