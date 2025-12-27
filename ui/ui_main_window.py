@@ -15,9 +15,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QDoubleSpinBox, QFrame,
-    QHBoxLayout, QLabel, QMainWindow, QPushButton,
-    QSizePolicy, QSpinBox, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QAbstractSpinBox, QApplication, QCheckBox, QDoubleSpinBox,
+    QFrame, QHBoxLayout, QLabel, QMainWindow,
+    QPushButton, QSizePolicy, QSpinBox, QVBoxLayout,
+    QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -71,6 +72,19 @@ class Ui_MainWindow(object):
 
         self.ball_number = QSpinBox(self.menu_frame)
         self.ball_number.setObjectName(u"ball_number")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.ball_number.sizePolicy().hasHeightForWidth())
+        self.ball_number.setSizePolicy(sizePolicy)
+        self.ball_number.setMouseTracking(False)
+        self.ball_number.setWrapping(False)
+        self.ball_number.setFrame(True)
+        self.ball_number.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
+        self.ball_number.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
+        self.ball_number.setProperty(u"showGroupSeparator", False)
+        self.ball_number.setMinimum(2)
+        self.ball_number.setValue(5)
 
         self.horizontalLayout.addWidget(self.ball_number)
 
@@ -89,6 +103,11 @@ class Ui_MainWindow(object):
 
         self.ball_diameter = QDoubleSpinBox(self.menu_frame)
         self.ball_diameter.setObjectName(u"ball_diameter")
+        sizePolicy.setHeightForWidth(self.ball_diameter.sizePolicy().hasHeightForWidth())
+        self.ball_diameter.setSizePolicy(sizePolicy)
+        self.ball_diameter.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
+        self.ball_diameter.setMinimum(3.000000000000000)
+        self.ball_diameter.setSingleStep(0.100000000000000)
 
         self.horizontalLayout_3.addWidget(self.ball_diameter)
 
@@ -107,6 +126,12 @@ class Ui_MainWindow(object):
 
         self.track_outer_radius = QSpinBox(self.menu_frame)
         self.track_outer_radius.setObjectName(u"track_outer_radius")
+        sizePolicy.setHeightForWidth(self.track_outer_radius.sizePolicy().hasHeightForWidth())
+        self.track_outer_radius.setSizePolicy(sizePolicy)
+        self.track_outer_radius.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
+        self.track_outer_radius.setMinimum(0)
+        self.track_outer_radius.setStepType(QAbstractSpinBox.StepType.DefaultStepType)
+        self.track_outer_radius.setValue(0)
 
         self.horizontalLayout_4.addWidget(self.track_outer_radius)
 
@@ -125,6 +150,11 @@ class Ui_MainWindow(object):
 
         self.reducer_outer_diameter = QSpinBox(self.menu_frame)
         self.reducer_outer_diameter.setObjectName(u"reducer_outer_diameter")
+        sizePolicy.setHeightForWidth(self.reducer_outer_diameter.sizePolicy().hasHeightForWidth())
+        self.reducer_outer_diameter.setSizePolicy(sizePolicy)
+        self.reducer_outer_diameter.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
+        self.reducer_outer_diameter.setMinimum(0)
+        self.reducer_outer_diameter.setValue(0)
 
         self.horizontalLayout_5.addWidget(self.reducer_outer_diameter)
 
@@ -143,7 +173,10 @@ class Ui_MainWindow(object):
 
         self.resolution = QSpinBox(self.menu_frame)
         self.resolution.setObjectName(u"resolution")
+        sizePolicy.setHeightForWidth(self.resolution.sizePolicy().hasHeightForWidth())
+        self.resolution.setSizePolicy(sizePolicy)
         self.resolution.setStyleSheet(u"background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 100), stop:1 rgba(255, 255, 255, 255));")
+        self.resolution.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
 
         self.horizontalLayout_6.addWidget(self.resolution)
 
@@ -153,11 +186,11 @@ class Ui_MainWindow(object):
         self.verticalLayout.addLayout(self.horizontalLayout_6)
 
         self.verticalLayout.setStretch(0, 1)
-        self.verticalLayout.setStretch(1, 1)
-        self.verticalLayout.setStretch(2, 1)
-        self.verticalLayout.setStretch(3, 1)
-        self.verticalLayout.setStretch(4, 1)
-        self.verticalLayout.setStretch(5, 1)
+        self.verticalLayout.setStretch(1, 2)
+        self.verticalLayout.setStretch(2, 2)
+        self.verticalLayout.setStretch(3, 2)
+        self.verticalLayout.setStretch(4, 2)
+        self.verticalLayout.setStretch(5, 2)
 
         self.verticalLayout_2.addLayout(self.verticalLayout)
 

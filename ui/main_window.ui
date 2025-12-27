@@ -51,7 +51,7 @@ border-radius: 5px;</string>
                 <number>4</number>
                </property>
                <item>
-                <layout class="QVBoxLayout" name="verticalLayout" stretch="1,1,1,1,1,1">
+                <layout class="QVBoxLayout" name="verticalLayout" stretch="1,2,2,2,2,2">
                  <item>
                   <widget class="QLabel" name="label_15">
                    <property name="styleSheet">
@@ -75,7 +75,38 @@ border-radius: 5px;</string>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QSpinBox" name="ball_number"/>
+                    <widget class="QSpinBox" name="ball_number">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="mouseTracking">
+                      <bool>false</bool>
+                     </property>
+                     <property name="wrapping">
+                      <bool>false</bool>
+                     </property>
+                     <property name="frame">
+                      <bool>true</bool>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+                     </property>
+                     <property name="buttonSymbols">
+                      <enum>QAbstractSpinBox::ButtonSymbols::PlusMinus</enum>
+                     </property>
+                     <property name="showGroupSeparator" stdset="0">
+                      <bool>false</bool>
+                     </property>
+                     <property name="minimum">
+                      <number>2</number>
+                     </property>
+                     <property name="value">
+                      <number>5</number>
+                     </property>
+                    </widget>
                    </item>
                   </layout>
                  </item>
@@ -92,7 +123,23 @@ border-radius: 5px;</string>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QDoubleSpinBox" name="ball_diameter"/>
+                    <widget class="QDoubleSpinBox" name="ball_diameter">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="buttonSymbols">
+                      <enum>QAbstractSpinBox::ButtonSymbols::PlusMinus</enum>
+                     </property>
+                     <property name="minimum">
+                      <double>3.000000000000000</double>
+                     </property>
+                     <property name="singleStep">
+                      <double>0.100000000000000</double>
+                     </property>
+                    </widget>
                    </item>
                   </layout>
                  </item>
@@ -109,7 +156,26 @@ border-radius: 5px;</string>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QSpinBox" name="track_outer_radius"/>
+                    <widget class="QSpinBox" name="track_outer_radius">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="buttonSymbols">
+                      <enum>QAbstractSpinBox::ButtonSymbols::PlusMinus</enum>
+                     </property>
+                     <property name="minimum">
+                      <number>0</number>
+                     </property>
+                     <property name="stepType">
+                      <enum>QAbstractSpinBox::StepType::DefaultStepType</enum>
+                     </property>
+                     <property name="value">
+                      <number>0</number>
+                     </property>
+                    </widget>
                    </item>
                   </layout>
                  </item>
@@ -126,7 +192,23 @@ border-radius: 5px;</string>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QSpinBox" name="reducer_outer_diameter"/>
+                    <widget class="QSpinBox" name="reducer_outer_diameter">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="buttonSymbols">
+                      <enum>QAbstractSpinBox::ButtonSymbols::PlusMinus</enum>
+                     </property>
+                     <property name="minimum">
+                      <number>0</number>
+                     </property>
+                     <property name="value">
+                      <number>0</number>
+                     </property>
+                    </widget>
                    </item>
                   </layout>
                  </item>
@@ -144,8 +226,17 @@ border-radius: 5px;</string>
                    </item>
                    <item>
                     <widget class="QSpinBox" name="resolution">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
                      <property name="styleSheet">
                       <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 100), stop:1 rgba(255, 255, 255, 255));</string>
+                     </property>
+                     <property name="buttonSymbols">
+                      <enum>QAbstractSpinBox::ButtonSymbols::PlusMinus</enum>
                      </property>
                     </widget>
                    </item>
