@@ -9,7 +9,7 @@ class ReducerGeometry:
     def __init__(self, params: ReducerParams):
         self.gear_number = params.gear_number
         self.ball_diameter = params.ball_diameter
-        self.requested_outer_radius = params.requested_outer_radius
+        self.requested_track_outer_radius = params.requested_track_outer_radius
         self.reducer_outer_diameter = params.reducer_outer_diameter
         self.resolution = params.resolution
 
@@ -45,13 +45,13 @@ class ReducerGeometry:
 
     @cached_property
     def track_outer_radius(self) -> float:
-        if self.requested_outer_radius is not None:
-            inner_radius = self._get_track_inner_radius_from_outer(self.requested_outer_radius)
+        if self.requested_track_outer_radius is not None:
+            inner_radius = self._get_track_inner_radius_from_outer(self.requested_track_outer_radius)
 
             if inner_radius <= self.min_inner_radius:
                 raise TooSmallRequstedRadius
 
-            return self.requested_outer_radius
+            return self.requested_track_outer_radius
         return self._get_track_outer_radius_from_inner(self.min_inner_radius)
 
     @cached_property
