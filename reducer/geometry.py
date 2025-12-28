@@ -9,7 +9,7 @@ class ReducerGeometry:
     def __init__(self, params: ReducerParams):
         self.gear_number = params.gear_number
         self.ball_diameter = params.ball_diameter
-        self.requested_outer_radius = params.requested_outer_radius
+        self.requested_track_outer_radius = params.requested_track_outer_radius
         self.reducer_outer_diameter = params.reducer_outer_diameter
         self.resolution = params.resolution
 
@@ -35,33 +35,33 @@ class ReducerGeometry:
         return 2.2 * self.eccentricity
 
 
-    def _get_inner_radius_from_outer(self, outer_radius) -> float:
+    def _get_track_inner_radius_from_outer(self, outer_radius) -> float:
         return outer_radius - 2 * self.eccentricity
 
 
-    def _get_outer_radius_from_inner(self, inner_radius) -> int:
+    def _get_track_outer_radius_from_inner(self, inner_radius) -> int:
         return ceil(inner_radius + 2 * self.eccentricity)
 
 
     @cached_property
-    def outer_radius(self) -> float:
-        if self.requested_outer_radius is not None:
-            inner_radius = self._get_inner_radius_from_outer(self.requested_outer_radius)
+    def track_outer_radius(self) -> float:
+        if self.requested_track_outer_radius is not None:
+            inner_radius = self._get_track_inner_radius_from_outer(self.requested_track_outer_radius)
 
             if inner_radius <= self.min_inner_radius:
                 raise TooSmallRequstedRadius
 
-            return self.requested_outer_radius
-        return self._get_outer_radius_from_inner(self.min_inner_radius)
+            return self.requested_track_outer_radius
+        return self._get_track_outer_radius_from_inner(self.min_inner_radius)
 
     @cached_property
-    def inner_radius(self) -> float:
-        return self._get_inner_radius_from_outer(self.outer_radius)
+    def track_inner_radius(self) -> float:
+        return self._get_track_inner_radius_from_outer(self.track_outer_radius)
 
 
     @cached_property
     def eccentric_radius(self):
-        return self.inner_radius + self.eccentricity - self.ball_diameter
+        return self.track_inner_radius + self.eccentricity - self.ball_diameter
 
 
     @cached_property
