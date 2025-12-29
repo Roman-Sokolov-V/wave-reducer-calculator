@@ -11,13 +11,13 @@ class DummyReducerParams:
         self,
         gear_number=10,
         ball_diameter=10.0,
-        requested_outer_radius=None,
+        requested_track_outer_radius=None,
         reducer_outer_diameter=None,
         resolution=1000,
     ):
         self.gear_number = gear_number
         self.ball_diameter = ball_diameter
-        self.requested_outer_radius = requested_outer_radius
+        self.requested_track_outer_radius = requested_track_outer_radius
         self.reducer_outer_diameter = reducer_outer_diameter
         self.resolution = resolution
 
@@ -66,26 +66,26 @@ def test_min_inner_radius_positive():
 
 
 def test_outer_radius_auto_calculated():
-    params = DummyReducerParams(requested_outer_radius=None)
+    params = DummyReducerParams(requested_track_outer_radius=None)
     geo = ReducerGeometry(params)
 
-    assert geo.outer_radius > geo.min_inner_radius
+    assert geo.track_outer_radius > geo.min_inner_radius
 
 
 def test_outer_radius_from_request():
-    params = DummyReducerParams(requested_outer_radius=100)
+    params = DummyReducerParams(requested_track_outer_radius=100)
     geo = ReducerGeometry(params)
 
-    assert geo.outer_radius == 100
-    assert geo.inner_radius == pytest.approx(100 - 2 * geo.eccentricity)
+    assert geo.track_outer_radius == 100
+    assert geo.track_inner_radius == pytest.approx(100 - 2 * geo.eccentricity)
 
 
 def test_too_small_requested_radius_raises():
-    params = DummyReducerParams(requested_outer_radius=1)
+    params = DummyReducerParams(requested_track_outer_radius=1)
     geo = ReducerGeometry(params)
 
     with pytest.raises(TooSmallRequstedRadius):
-        _ = geo.outer_radius
+        _ = geo.track_outer_radius
 
 
 # -------------------------
@@ -96,7 +96,7 @@ def test_eccentric_radius_formula():
     params = DummyReducerParams()
     geo = ReducerGeometry(params)
 
-    expected = geo.inner_radius + geo.eccentricity - geo.ball_diameter
+    expected = geo.track_inner_radius + geo.eccentricity - geo.ball_diameter
     assert geo.eccentric_radius == pytest.approx(expected)
 
 
