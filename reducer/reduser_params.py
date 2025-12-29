@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+
 @dataclass
 class ReducerParams:
     gear_number: int | None = None
