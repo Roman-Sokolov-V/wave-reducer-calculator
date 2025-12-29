@@ -1,6 +1,4 @@
 import sys
-from matplotlib.backends.backend_qtagg import FigureCanvas
-from matplotlib.figure import Figure
 from PySide6.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -23,14 +21,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.reducer_geometry = None
 
-        self.default_notification = (f"ball number = {self.ball_number.value()} - required\n"
-                                   f"ball diameter = {self.ball_diameter.value()} - required\n"
-                                   f"track outer radius = {self.track_outer_radius.value()} - if 0 value will be calculated (minimum possible) \n"
-                                   f"reducer outer radius = {self.reducer_outer_diameter.value()} - if 0 will be calculated as track_outer_radius + 2 \n")
-        self.to_small_track_outer_radius_notification = ("inputed track outer radius is too small\n"
-                                                         "try to inputing biger number, or 0\n"
-                                                         "or change ball diameter or ball number\n")
-
+        self.default_notification = (
+            f"ball number = {self.ball_number.value()} - required\n"
+            f"ball diameter = {self.ball_diameter.value()} - required\n"
+            f"track outer radius = {self.track_outer_radius.value()}"
+            f" - if 0 value will be calculated (minimum possible) \n"
+            f"reducer outer radius = {self.reducer_outer_diameter.value()}"
+            f" - if 0 will be calculated as track_outer_radius + 2 \n"
+        )
+        self.to_small_track_outer_radius_notification = (
+            "inputed track outer radius is too small\n"
+            "try to inputing biger number, or 0\n"
+            "or change ball diameter or ball number\n"
+        )
 
         self.exeption_hapened = False
         self.notifications.setText(self.default_notification)
@@ -42,9 +45,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.visualize_pushButton.setCheckable(True)
         self.export_pushButton.setCheckable(True)
 
-        self.visualize_pushButton.clicked.connect(self.vizualize_button_clicked)
+        self.visualize_pushButton.clicked.connect(
+            self.vizualize_button_clicked
+        )
         self.export_pushButton.clicked.connect(self.export_push_button_clicked)
-
 
     def get_params(self) -> ReducerParams:
         print(f"{self.track_outer_radius.value()=}")
@@ -52,8 +56,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         reducer_param = ReducerParams(
             gear_number=self.ball_number.value(),
             ball_diameter=self.ball_diameter.value(),
-            requested_track_outer_radius=self.track_outer_radius.value() if self.track_outer_radius.value() != 0 else None,
-            reducer_outer_diameter=self.reducer_outer_diameter.value() if self.reducer_outer_diameter.value() != 0 else None,
+            requested_track_outer_radius=(
+                self.track_outer_radius.value()
+                if self.track_outer_radius.value() != 0
+                else None
+            ),
+            reducer_outer_diameter=(
+                self.reducer_outer_diameter.value()
+                if self.reducer_outer_diameter.value() != 0
+                else None
+            ),
         )
         return reducer_param
 
@@ -77,7 +89,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.visualizer = ReducerVisualizer(self.reducer_geometry)
         except TooSmallRequstedRadius as e:
             print(str(e))
-            self.notifications.setText(self.to_small_track_outer_radius_notification)
+            self.notifications.setText(
+                self.to_small_track_outer_radius_notification
+            )
             self.exeption_hapened = True
             self.clear_plot()
 
@@ -95,11 +109,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             layout.addWidget(self.visualizer.canvas)
             self.visualizer.draw()
 
-
-
     def export_push_button_clicked(self):
         if self.reducer_geometry is None:
-            self.notifications.setText("input parameters and make visualisation first")
+            self.notifications.setText(
+                "input parameters and make visualisation first"
+            )
             return
 
         export = ReducerDXFExporter(self.reducer_geometry)
@@ -110,12 +124,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         )
         self.notifications.setText("export done")
 
-
     def parameter_changed(self):
         if self.exeption_hapened:
             self.exeption_hapened = False
             self.notifications.setText(self.default_notification)
-
 
 
 app = QApplication(sys.argv)
@@ -125,4 +137,3 @@ window = MainWindow()
 if __name__ == "__main__":
     window.show()
     app.exec_()
-
